@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Blood Owners V3</title>
+<style>
+html{scroll-behavior:smooth}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050505;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
+canvas{position:fixed;inset:0;z-index:-2}
+#logoBg{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;pointer-events:none;opacity:.03;z-index:-1}
+#logoBg div{font-size:25vw;font-weight:900;animation:spin 80s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+nav{position:fixed;top:0;width:100%;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);display:flex;justify-content:center;gap:25px;padding:18px;z-index:100}
+nav a{color:white;text-decoration:none;padding:8px 14px;border-radius:10px;transition:.3s}
+nav a:hover{background:#1f4fff;box-shadow:0 0 20px #1f4fff}
+
+section{padding:100px 20px;max-width:1300px;margin:auto}
+.hero{text-align:center;padding-top:140px}
+.hero h1{font-size:4rem}
+.card{background:#111;border:1px solid #333;border-radius:20px;padding:20px;cursor:pointer;transition:.4s}
+.card:hover{transform:translateY(-8px);box-shadow:0 0 25px rgba(50,100,255,.5)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.title{text-align:center;font-size:2.5rem;margin-bottom:40px}
+.playerDetails{display:none;background:#0f0f0f;border:1px solid #333;border-radius:20px;padding:25px;margin-top:20px;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.rating-good{color:#4dff88;text-shadow:0 0 15px #4dff88}
+.rating-best{color:#52a8ff;text-shadow:0 0 20px #52a8ff}
+.stat{background:#111;padding:20px;border-radius:20px;text-align:center}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.bracket{overflow:auto;background:#0d0d0d;padding:25px;border-radius:20px}
+.round{display:inline-block;vertical-align:top;width:250px;margin-right:40px}
+.match{border:1px solid #39ff88;padding:15px;border-radius:12px;margin:20px 0;box-shadow:0 0 12px rgba(57,255,136,.2);transition:.3s}
+.match:hover{transform:scale(1.03);box-shadow:0 0 20px rgba(57,255,136,.5)}
+.reveal{opacity:0;transform:translateY(40px);transition:1s}
+.reveal.show{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div id="logoBg"><div>BO</div></div>
+
+<nav>
+<a href="#home">Home</a>
+<a href="#stats">Stats</a>
+<a href="#players">Players</a>
+<a href="#tournament">Tournament</a>
+</nav>
+
+<section class="hero" id="home">
+<h1>BLOOD OWNERS</h1>
+<p>Counter-Strike 2 Team</p>
+</section>
+
+<section class="reveal" id="stats">
+<h2 class="title">Team Stats</h2>
+<div class="stats">
+<div class="stat"><h1>3</h1><p>Matches</p></div>
+<div class="stat"><h1>2</h1><p>Wins</p></div>
+<div class="stat"><h1>1</h1><p>Losses</p></div>
+<div class="stat"><h1>66.7%</h1><p>Win Rate</p></div>
+</div>
+</section>
+
+<section class="reveal" id="players">
+<h2 class="title">Players</h2>
+
+<div class="grid">
+<div class="card" onclick="showPlayer('mAVR1K','Entry Fragger','1.08','1.06','17','70%')">mAVR1K</div>
+<div class="card" onclick="showPlayer('Lwftaze','Lurker','1.06','1.13','17','40%')">Lwftaze</div>
+<div class="card" onclick="showPlayer('sem41qq','AWPer','1.22','1.24','21','60%')">sem41qq ⭐</div>
+<div class="card" onclick="showPlayer('s0plen0k','IGL','1.13','1.13','18','50%')">s0plen0k</div>
+<div class="card" onclick="showPlayer('Komugi','Support','0.98','0.94','15','80%')">Komugi</div>
+</div>
+
+<div id="playerDetails" class="playerDetails"></div>
+</section>
+
+<section class="reveal" id="tournament">
+<h2 class="title">🏆 CSLT TOURNAMENT #1</h2>
+
+<div class="bracket">
+
+<div class="round">
+<h3>ROUND 1</h3>
+<div class="match">Blood Owners<br>2:0 Warm Ray</div>
+</div>
+
+<div class="round">
+<h3>SEMI FINAL</h3>
+<div class="match">Blood Owners<br>2:0 LEGEND5</div>
+</div>
+
+<div class="round">
+<h3>GRAND FINAL (BO3)</h3>
+<div class="match" style="border-color:gold;box-shadow:0 0 25px gold">
+🥇 Blood Owners<br>
+2:0 SunCry<br><br>
+Tournament Winner
+</div>
+</div>
+
+</div>
+</section>
+
+<script>
+function showPlayer(name,role,rating,kd,avg,hs){
+let cls=parseFloat(rating)>=1.15?'rating-best':'rating-good';
+document.getElementById('playerDetails').style.display='block';
+document.getElementById('playerDetails').innerHTML=`
+<h2>${name}</h2><br>
+<p>Role: ${role}</p><br>
+<p class="${cls}">Rating: ${rating}</p><br>
+<p>KD: ${kd}</p><br>
+<p>AVG Kills: ${avg}</p><br>
+<p>HS: ${hs}</p>`;
+document.getElementById('playerDetails').scrollIntoView({behavior:'smooth'});
+}
+
+const obs=new IntersectionObserver(e=>{
+e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('show')})
+});
+document.querySelectorAll('.reveal').forEach(x=>obs.observe(x));
+
+const c=document.getElementById('bg');
+const ctx=c.getContext('2d');
+c.width=innerWidth;c.height=innerHeight;
+let p=[];
+for(let i=0;i<100;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2+1,v:Math.random()*0.5});
+function a(){
+ctx.clearRect(0,0,c.width,c.height);
+ctx.fillStyle='white';
+p.forEach(x=>{
+ctx.globalAlpha=.25;
+ctx.beginPath();
+ctx.arc(x.x,x.y,x.r,0,6.28);
+ctx.fill();
+x.y-=x.v;
+if(x.y<0)x.y=c.height;
+});
+requestAnimationFrame(a);
+}
+a();
+</script>
+
+</body>
+</html>
